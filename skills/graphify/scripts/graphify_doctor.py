@@ -185,6 +185,28 @@ def count_files(project: Path, limit: int = 10000) -> dict[str, Any]:
     }
 
 
+def google_pointer_summary(project: Path) -> dict[str, Any]:
+    total = 0
+    converted = 0
+    missing: list[str] = []
+    for path in project.rglob("*"):
+        if not path.is_file() or path.suffix.lower() not in GOOGLE_NATIVE_EXTS:
+            continue
+        if any(part in SKIP_DIRS for part in path.relative_to(project).parts):
+            continue
+        total += 1
+        target = path.with_suffix(".md")
+        if target.exists():
+            converted += 1
+        else:
+            missing.append(str(path.relative_to(project)))
+    return {
+        "total": total,
+        "converted_to_markdown": converted,
+        "missing_markdown": missing,
+    }
+
+
 def codex_config_state() -> dict[str, Any]:
     config = Path.home() / ".codex" / "config.toml"
     text = read_text(config)
@@ -271,6 +293,7 @@ def inspect(project: Path) -> dict[str, Any]:
         "project_hygiene": {
             "graphifyignore_exists": graphifyignore.exists(),
         },
+        "google_workspace": google_pointer_summary(project),
         "project_files": count_files(project),
         "findings": findings,
     }
@@ -285,10 +308,10 @@ def recommendations(report: dict[str, Any]) -> list[str]:
     graph = report["graph"]
     codex = report["codex"]
     hygiene = report["project_hygiene"]
+    google_workspace = report["google_workspace"]
     files = report["project_files"]
     ext_counts = files["interesting_extensions"]
     total = int(files["total_seen"])
-    google_native_count = sum(ext_counts.get(ext, 0) for ext in GOOGLE_NATIVE_EXTS)
     media_count = sum(ext_counts.get(ext, 0) for ext in MEDIA_EXTS)
 
     if not graphify["cli"]:
@@ -299,8 +322,9 @@ def recommendations(report: dict[str, Any]) -> list[str]:
     if codex["exists"] and not codex["multi_agent_true"]:
         recs.append("Enable Codex skill calls by adding multi_agent = true under [features] in ~/.codex/config.toml")
 
-    if google_native_count:
-        recs.append(f"Export or convert {google_native_count} Google Workspace pointer files before indexing; .gdoc/.gsheet/.gslides are not native document contents")
+    missing_google = google_workspace["missing_markdown"]
+    if missing_google:
+        recs.append(f"Export or convert {len(missing_google)} Google Workspace pointer files before indexing; .gdoc/.gsheet/.gslides are not native document contents")
 
     if total > 500 and not hygiene["graphifyignore_exists"]:
         recs.append("Create a .graphifyignore before a full run, or start with a focused subfolder")
@@ -356,6 +380,12 @@ def print_text(report: dict[str, Any]) -> None:
 
     hygiene = report["project_hygiene"]
     print(f".graphifyignore: {hygiene['graphifyignore_exists']}")
+
+    google_workspace = report["google_workspace"]
+    print(
+        "Google Workspace pointers: "
+        f"{google_workspace['converted_to_markdown']}/{google_workspace['total']} have Markdown derivatives"
+    )
 
     files = report["project_files"]
     print(f"Files seen: {files['total_seen']}{' (truncated)' if files['truncated'] else ''}")
