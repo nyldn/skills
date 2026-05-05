@@ -1,0 +1,4 @@
+interface:
+  display_name: "Graphify"
+  short_description: "Build and use project knowledge graphs"
+  default_prompt: "Use $graphify to build, refresh, and query a project knowledge graph before answering codebase questions."
