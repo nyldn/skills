@@ -12,7 +12,7 @@ WITH_GRAPHIFY_CLI=0
 usage() {
   cat <<'USAGE'
 Usage:
-  install.sh [graphify] [--with-graphify-cli]
+  install.sh [graphify|repo-delivery] [--with-graphify-cli]
 
 Environment:
   CODEX_HOME             Codex home directory, default: ~/.codex
@@ -21,14 +21,15 @@ Environment:
 
 Examples:
   curl -fsSL https://raw.githubusercontent.com/nyldn/skills/main/install.sh | bash
+  curl -fsSL https://raw.githubusercontent.com/nyldn/skills/main/install.sh | bash -s -- repo-delivery
   curl -fsSL https://raw.githubusercontent.com/nyldn/skills/main/install.sh | bash -s -- graphify --with-graphify-cli
 USAGE
 }
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
-    graphify)
-      SKILL="graphify"
+    graphify|repo-delivery)
+      SKILL="$1"
       ;;
     --with-graphify-cli)
       WITH_GRAPHIFY_CLI=1
@@ -45,6 +46,11 @@ while [[ $# -gt 0 ]]; do
   esac
   shift
 done
+
+if [[ "$WITH_GRAPHIFY_CLI" -eq 1 && "$SKILL" != "graphify" ]]; then
+  echo "--with-graphify-cli applies only to the graphify skill." >&2
+  exit 2
+fi
 
 require_cmd() {
   if ! command -v "$1" >/dev/null 2>&1; then
@@ -117,4 +123,6 @@ link_skill "$SKILL"
 echo
 echo "Done."
 echo "Use \$$SKILL in Codex, or ask Codex to use the $SKILL skill."
-echo "For Graphify CLI setup too, re-run with: --with-graphify-cli"
+if [[ "$SKILL" == "graphify" ]]; then
+  echo "For Graphify CLI setup too, re-run with: --with-graphify-cli"
+fi

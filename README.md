@@ -4,7 +4,7 @@ Shared Codex and AI-assistant skills maintained by NYLDN.
 
 ## Quick Install
 
-Install the default skills into Codex:
+Install the default Graphify skill into Codex:
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/nyldn/skills/main/install.sh | bash
@@ -19,6 +19,23 @@ curl -fsSL https://raw.githubusercontent.com/nyldn/skills/main/install.sh | bash
 The installer clones this repo to `~/.codex/nyldn-skills` and symlinks skills into `~/.codex/skills`. Re-running it pulls the latest repo changes and refreshes the symlinks.
 
 ## Available Skills
+
+### Repository delivery
+
+Use `$repo-delivery` when improving how people install, run, update, or remove
+your software. It helps the agent choose an approach that fits the project,
+write clear setup instructions, and test the steps a new user will follow.
+It covers CLIs, libraries, web apps, desktop apps, and agent skills or plugins.
+
+Install it into Codex:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/nyldn/skills/main/install.sh | bash -s -- repo-delivery
+```
+
+The skill keeps each repository's commands and requirements in a short
+`docs/DELIVERY.md`. It requires no extra tools or background services of its own.
+Read the [skill instructions](skills/repo-delivery/SKILL.md).
 
 ### Graphify
 
