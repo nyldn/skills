@@ -1,98 +1,108 @@
-# NYLDN Skills
+# NYLDN skills
 
-Shared Codex and AI-assistant skills maintained by NYLDN.
+Practical skills for understanding codebases and making software easier to
+install and use.
 
-## Quick Install
+Each skill gives your coding agent a repeatable workflow for a specific job.
+Pick the ones you need. The instructions live in readable Markdown files you
+can inspect and adapt to your project.
 
-Install the default Graphify skill into Codex:
+## Skills
 
-```bash
-curl -fsSL https://raw.githubusercontent.com/nyldn/skills/main/install.sh | bash
-```
+| Skill | What it helps you do |
+|---|---|
+| [Graphify](skills/graphify/SKILL.md) | Map how code and documents connect, answer questions about a project, and diagnose stale or broken knowledge graphs. |
+| [Repository delivery](skills/repo-delivery/SKILL.md) | Make installation, updates, and removal easier for users. Choose packaging that fits the project and test the steps a new user will follow. |
 
-Install the Graphify skill and also install or update the Graphify CLI:
+## Install
 
-```bash
-curl -fsSL https://raw.githubusercontent.com/nyldn/skills/main/install.sh | bash -s -- graphify --with-graphify-cli
-```
+The included installer sets up skills for **Codex**. Run the command for the
+skill you want in a terminal with Bash, Git, and curl available.
 
-The installer clones this repo to `~/.codex/nyldn-skills` and symlinks skills into `~/.codex/skills`. Re-running it pulls the latest repo changes and refreshes the symlinks.
-
-## Available Skills
-
-### Repository delivery
-
-Use `$repo-delivery` when improving how people install, run, update, or remove
-your software. It helps the agent choose an approach that fits the project,
-write clear setup instructions, and test the steps a new user will follow.
-It covers CLIs, libraries, web apps, desktop apps, and agent skills or plugins.
-
-Install it into Codex:
+**Repository delivery**
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/nyldn/skills/main/install.sh | bash -s -- repo-delivery
 ```
 
-The skill keeps each repository's commands and requirements in a short
-`docs/DELIVERY.md`. It requires no extra tools or background services of its own.
-Read the [skill instructions](skills/repo-delivery/SKILL.md).
-
-### Graphify
-
-Use `$graphify` or ask Codex to use the Graphify skill when you need to build, refresh, query, troubleshoot, or operationalize project knowledge graphs.
-
-What it includes:
-
-- A graph-first workflow for architecture and relationship questions.
-- Install and troubleshooting guidance for Graphify's `graphifyy` package and `graphify` CLI.
-- A `graphify_doctor.py` diagnostic script that checks CLI state, Codex config, graph freshness, `.graphifyignore`, Google Workspace pointer files, and likely next steps.
-- Research notes summarizing Graphify v7 docs and recent Reddit usage patterns.
-
-Graphify CLI install, if you do it manually:
+**Graphify**
 
 ```bash
-uv tool install --force "graphifyy[office,video,mcp]"
-graphify install --platform codex
+curl -fsSL https://raw.githubusercontent.com/nyldn/skills/main/install.sh | bash -s -- graphify
 ```
 
-For a project that should always use an existing graph:
+You can [read the installer](install.sh) before running it. Start a new Codex
+session if the installed skill does not appear.
 
-```bash
-cd /path/to/project
-graphify codex install
+## Use
+
+Name the skill in your prompt and describe the result you want:
+
+```text
+$repo-delivery Review this project's setup and make it easier for a new user
+to install, update, and remove. Keep the approach appropriate for this repo.
 ```
 
-Codex uses `$graphify` in chat. Some upstream Graphify examples use `/graphify`, which is the Claude-style command.
-
-## Manual Install
-
-```bash
-git clone https://github.com/nyldn/skills.git ~/.codex/nyldn-skills
-mkdir -p ~/.codex/skills
-ln -sfn ~/.codex/nyldn-skills/skills/graphify ~/.codex/skills/graphify
+```text
+$graphify Map this project and explain how authentication connects to billing.
 ```
 
-If `~/.codex/skills/graphify` already exists as a real directory, move it aside before symlinking:
+Repository delivery needs no separate runtime. Graphify also needs the
+Graphify CLI. Its setup option is below.
+
+## Setup and updates
+
+<details>
+<summary>Install or update the Graphify CLI</summary>
+
+With [uv](https://docs.astral.sh/uv/getting-started/installation/) installed, run:
 
 ```bash
-mv ~/.codex/skills/graphify ~/.codex/skills/graphify.backup.$(date +%Y%m%d%H%M%S)
-ln -sfn ~/.codex/nyldn-skills/skills/graphify ~/.codex/skills/graphify
+curl -fsSL https://raw.githubusercontent.com/nyldn/skills/main/install.sh | bash -s -- graphify --with-graphify-cli
 ```
 
-## Development
+This installs or updates the `graphifyy` package with its office, video, and MCP
+extras, then attempts Graphify's Codex integration. The executable is named
+`graphify`. The [Graphify skill](skills/graphify/SKILL.md) has the project setup
+and troubleshooting steps.
 
-Skill directories live under `skills/<name>/`.
+</details>
 
-Each skill should include:
+<details>
+<summary>Where skills live and how to update them</summary>
 
-- `SKILL.md` with concise frontmatter and operational instructions.
-- `agents/openai.yaml` when UI metadata or a default prompt is useful.
-- `scripts/` for executable diagnostics or helpers.
-- `references/` for longer research notes or detailed guidance.
+The installer clones this repository to `~/.codex/nyldn-skills` and links the
+selected skill into `~/.codex/skills`. If a real directory already occupies the
+destination, the installer moves it to a timestamped backup before linking.
 
-Validate a skill locally:
+Rerun an install command to pull the latest repository changes. All skills
+linked to that checkout receive those updates. If you edit the cloned files,
+preserve your changes before updating.
+
+Set `CODEX_HOME` to use a different Codex home, or `NYLDN_SKILLS_HOME` to choose
+where the repository is cloned. Run `bash install.sh --help` from a checkout
+for the available options.
+
+</details>
+
+<details>
+<summary>Develop or adapt a skill</summary>
+
+Skills live in `skills/<name>/`. Keep the workflow in `SKILL.md`, longer guidance
+in `references/`, and executable helpers in `scripts/`. Add `agents/openai.yaml`
+when a skill needs UI metadata.
+
+If Codex's skill-creator tools are installed, validate a skill from this checkout:
 
 ```bash
-uv run --with pyyaml python ~/.codex/skills/.system/skill-creator/scripts/quick_validate.py skills/graphify
+uv run --with pyyaml python ~/.codex/skills/.system/skill-creator/scripts/quick_validate.py skills/repo-delivery
+```
+
+Use `skills/graphify` instead to validate Graphify. Its diagnostic script can
+also be checked with:
+
+```bash
 python3 -m py_compile skills/graphify/scripts/graphify_doctor.py
 ```
+
+</details>
