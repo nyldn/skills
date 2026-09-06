@@ -14,6 +14,21 @@ can inspect and adapt to your project.
 | [Graphify](skills/graphify/SKILL.md) | Map how code and documents connect, answer questions about a project, and diagnose stale or broken knowledge graphs. |
 | [Repository delivery](skills/repo-delivery/SKILL.md) | Make installation, updates, and removal easier for users. Choose packaging that fits the project and test the steps a new user will follow. |
 
+## More standalone skills
+
+[Claude Octopus](https://github.com/nyldn/claude-octopus) includes several
+original skills whose core workflows also work without Octopus. These links
+open the source skills in that repository. They are not installed by this
+repository's installer.
+
+| Skill | What it helps you do |
+|---|---|
+| [Systematic audit](https://github.com/nyldn/claude-octopus/blob/main/.claude/skills/skill-audit/SKILL.md) | Check a codebase methodically, record evidence, and turn findings into a prioritized repair plan. |
+| [Test coverage audit](https://github.com/nyldn/claude-octopus/blob/main/.claude/skills/skill-coverage-audit/SKILL.md) | Find important changed code that tests do not exercise and add focused coverage. |
+| [Decision support](https://github.com/nyldn/claude-octopus/blob/main/.claude/skills/skill-decision-support/SKILL.md) | Compare practical options, explain the tradeoffs, and recommend a clear course of action. |
+| [Documentation sync](https://github.com/nyldn/claude-octopus/blob/main/.claude/skills/skill-doc-sync/SKILL.md) | Bring project documentation back in line with the code after a change or release. |
+| [Thought partner](https://github.com/nyldn/claude-octopus/blob/main/.claude/skills/skill-thought-partner/SKILL.md) | Explore an early idea through questions, alternatives, and concrete next steps. |
+
 ## Install
 
 The included installer sets up skills for **Codex**. Run the command for the
