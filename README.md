@@ -1,26 +1,79 @@
 # NYLDN skills
 
-Practical skills for understanding codebases and making software easier to
-install and use.
+[![skills.sh](https://skills.sh/b/nyldn/skills)](https://skills.sh/nyldn/skills)
 
-Each skill gives your coding agent a repeatable workflow for a specific job.
-Pick the ones you need. The instructions live in readable Markdown files you
-can inspect and adapt to your project.
+Small, practical workflows that help coding agents do recurring engineering
+work consistently.
 
-## Skills
+Instead of explaining the same process in every prompt, install a skill once.
+The agent gets a clear method, useful checks, and a definition of done. Every
+skill is a readable Markdown file, so you can inspect it and adapt it.
+
+## Installation (30-second setup)
+
+Run this from a terminal:
+
+```bash
+npx skills@latest add nyldn/skills
+```
+
+Choose the skills you want and the coding agents that should receive them. The
+installer currently finds two skills:
+
+- `graphify`
+- `repo-delivery`
+
+Use `--global` if you want the selected skills available in every project:
+
+```bash
+npx skills@latest add nyldn/skills --global
+```
+
+Start a new agent session if an installed skill does not appear immediately.
+
+## Why use these skills?
+
+- **Less repeated prompting:** describe the result you want without restating
+  the full workflow.
+- **More reliable work:** each skill gives the agent ordered steps and checks.
+- **Easy to trust:** the instructions are ordinary files you can read before
+  using them.
+- **Easy to adapt:** install only what helps and change your local copy when a
+  project needs different rules.
+
+## Included skills
 
 | Skill | What it helps you do |
 |---|---|
 | [Graphify](skills/graphify/SKILL.md) | Map how code and documents connect, answer questions about a project, and diagnose stale or broken knowledge graphs. |
 | [Repository delivery](skills/repo-delivery/SKILL.md) | Make installation, updates, and removal easier for users. Choose packaging that fits the project and test the steps a new user will follow. |
 
+## Using a skill
+
+Name the skill in your prompt and describe the result you want:
+
+```text
+$repo-delivery Review this project's setup and make it easier for a new user
+to install, update, and remove.
+```
+
+```text
+$graphify Map this project and explain how authentication connects to billing.
+```
+
+Repository delivery needs no separate runtime. Graphify needs the Graphify CLI
+when you want it to build or query a knowledge graph; those setup steps are
+under **Other installation options** below.
+
 ## More standalone skills
 
 [Claude Octopus](https://github.com/nyldn/claude-octopus) includes several
 skills whose core workflows work without installing Octopus. A few mention
 optional Octopus helpers or related skills, but those references are not needed
-to complete the main workflow. These links open the source skills in that
-repository. They are not installed by this repository's installer.
+to complete the main workflow.
+
+These links open the source skills in the Octopus repository. The installer
+above does not install them.
 
 | Skill | What it helps you do |
 |---|---|
@@ -38,10 +91,30 @@ repository. They are not installed by this repository's installer.
 | [Verification gate](https://github.com/nyldn/claude-octopus/blob/main/.claude/skills/skill-verification-gate/SKILL.md) | Require fresh evidence before claiming that work is complete, fixed, or ready to ship. |
 | [Visual feedback](https://github.com/nyldn/claude-octopus/blob/main/.claude/skills/skill-visual-feedback/SKILL.md) | Turn screenshots and visual bug reports into scoped fixes and repeatable checks. |
 
-## Install
+## Updating or removing skills
 
-The included installer sets up skills for **Codex**. Run the command for the
-skill you want in a terminal with Bash, Git, and curl available.
+Update skills installed through the standard installer:
+
+```bash
+npx skills@latest update
+```
+
+Choose installed skills to remove:
+
+```bash
+npx skills@latest remove
+```
+
+Add `--global` when updating globally installed skills.
+
+## Other installation options
+
+<details>
+<summary><strong>Install a linked copy for Codex</strong></summary>
+
+The repository's installer maintains one checkout under
+`~/.codex/nyldn-skills` and links the selected skill into
+`~/.codex/skills`.
 
 **Repository delivery**
 
@@ -55,78 +128,54 @@ curl -fsSL https://raw.githubusercontent.com/nyldn/skills/main/install.sh | bash
 curl -fsSL https://raw.githubusercontent.com/nyldn/skills/main/install.sh | bash -s -- graphify
 ```
 
-You can [read the installer](install.sh) before running it. Start a new Codex
-session if the installed skill does not appear.
+Rerun a command to pull updates. If a real directory already occupies the
+destination, the installer moves it to a timestamped backup before linking.
+You can [read the installer](install.sh) before running it.
 
-## Use
-
-Name the skill in your prompt and describe the result you want:
-
-```text
-$repo-delivery Review this project's setup and make it easier for a new user
-to install, update, and remove. Keep the approach appropriate for this repo.
-```
-
-```text
-$graphify Map this project and explain how authentication connects to billing.
-```
-
-Repository delivery needs no separate runtime. Graphify also needs the
-Graphify CLI. Its setup option is below.
-
-## Setup and updates
+</details>
 
 <details>
-<summary>Install or update the Graphify CLI</summary>
+<summary><strong>Install or update the Graphify CLI</strong></summary>
 
-With [uv](https://docs.astral.sh/uv/getting-started/installation/) installed, run:
+With [uv](https://docs.astral.sh/uv/getting-started/installation/) installed,
+run:
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/nyldn/skills/main/install.sh | bash -s -- graphify --with-graphify-cli
 ```
 
-This installs or updates the `graphifyy` package with its office, video, and MCP
-extras, then attempts Graphify's Codex integration. The executable is named
-`graphify`. The [Graphify skill](skills/graphify/SKILL.md) has the project setup
-and troubleshooting steps.
+This installs or updates the `graphifyy` package with its office, video, and
+MCP extras, then attempts Graphify's Codex integration. The executable is named
+`graphify`. The [Graphify skill](skills/graphify/SKILL.md) includes project
+setup and troubleshooting.
 
 </details>
 
 <details>
-<summary>Where skills live and how to update them</summary>
+<summary><strong>Change where the Codex installer stores skills</strong></summary>
 
-The installer clones this repository to `~/.codex/nyldn-skills` and links the
-selected skill into `~/.codex/skills`. If a real directory already occupies the
-destination, the installer moves it to a timestamped backup before linking.
-
-Rerun an install command to pull the latest repository changes. All skills
-linked to that checkout receive those updates. If you edit the cloned files,
-preserve your changes before updating.
-
-Set `CODEX_HOME` to use a different Codex home, or `NYLDN_SKILLS_HOME` to choose
-where the repository is cloned. Run `bash install.sh --help` from a checkout
-for the available options.
+Set `CODEX_HOME` to use a different Codex home. Set
+`NYLDN_SKILLS_HOME` to choose where the shared repository checkout is stored.
+Run `bash install.sh --help` from a checkout to see every option.
 
 </details>
 
-<details>
-<summary>Develop or adapt a skill</summary>
+## Developing a skill
 
-Skills live in `skills/<name>/`. Keep the workflow in `SKILL.md`, longer guidance
-in `references/`, and executable helpers in `scripts/`. Add `agents/openai.yaml`
-when a skill needs UI metadata.
+Skills live in `skills/<name>/`. Keep the main workflow in `SKILL.md`,
+longer guidance in `references/`, and executable helpers in `scripts/`. Add
+`agents/openai.yaml` when a skill needs interface metadata.
 
-If Codex's skill-creator tools are installed, validate a skill from this checkout:
+If Codex's skill-creator tools are installed, validate a skill from this
+checkout:
 
 ```bash
 uv run --with pyyaml python ~/.codex/skills/.system/skill-creator/scripts/quick_validate.py skills/repo-delivery
 ```
 
-Use `skills/graphify` instead to validate Graphify. Its diagnostic script can
-also be checked with:
+Use `skills/graphify` instead to validate Graphify. Check its diagnostic
+script with:
 
 ```bash
 python3 -m py_compile skills/graphify/scripts/graphify_doctor.py
 ```
-
-</details>
