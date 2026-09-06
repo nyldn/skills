@@ -17,17 +17,26 @@ can inspect and adapt to your project.
 ## More standalone skills
 
 [Claude Octopus](https://github.com/nyldn/claude-octopus) includes several
-original skills whose core workflows also work without Octopus. These links
-open the source skills in that repository. They are not installed by this
-repository's installer.
+skills whose core workflows work without installing Octopus. A few mention
+optional Octopus helpers or related skills, but those references are not needed
+to complete the main workflow. These links open the source skills in that
+repository. They are not installed by this repository's installer.
 
 | Skill | What it helps you do |
 |---|---|
-| [Systematic audit](https://github.com/nyldn/claude-octopus/blob/main/.claude/skills/skill-audit/SKILL.md) | Check a codebase methodically, record evidence, and turn findings into a prioritized repair plan. |
-| [Test coverage audit](https://github.com/nyldn/claude-octopus/blob/main/.claude/skills/skill-coverage-audit/SKILL.md) | Find important changed code that tests do not exercise and add focused coverage. |
+| [Agent topology audit](https://github.com/nyldn/claude-octopus/blob/main/.claude/skills/skill-agent-topology/SKILL.md) | Decide whether each agent in a multi-agent workflow adds enough value to justify its coordination cost. |
+| [Content analysis pipeline](https://github.com/nyldn/claude-octopus/blob/main/.claude/skills/skill-content-pipeline/SKILL.md) | Study successful articles and posts, then turn their structure and techniques into a reusable guide. |
 | [Decision support](https://github.com/nyldn/claude-octopus/blob/main/.claude/skills/skill-decision-support/SKILL.md) | Compare practical options, explain the tradeoffs, and recommend a clear course of action. |
 | [Documentation sync](https://github.com/nyldn/claude-octopus/blob/main/.claude/skills/skill-doc-sync/SKILL.md) | Bring project documentation back in line with the code after a change or release. |
+| [Meta-prompt](https://github.com/nyldn/claude-octopus/blob/main/.claude/skills/skill-meta-prompt/SKILL.md) | Turn a rough request into precise instructions with clear constraints, output requirements, and checks. |
+| [PRD writing](https://github.com/nyldn/claude-octopus/blob/main/.claude/skills/skill-prd/SKILL.md) | Turn a product idea into clear requirements, priorities, success measures, and acceptance criteria. |
+| [Review response](https://github.com/nyldn/claude-octopus/blob/main/.claude/skills/skill-review-response/SKILL.md) | Check review feedback against the code before accepting it, fixing it, or explaining why it should not be applied. |
+| [Security framing](https://github.com/nyldn/claude-octopus/blob/main/.claude/skills/skill-security-framing/SKILL.md) | Handle outside URLs and content safely without treating untrusted text as instructions. |
+| [Systematic audit](https://github.com/nyldn/claude-octopus/blob/main/.claude/skills/skill-audit/SKILL.md) | Check a codebase methodically, record evidence, and turn findings into a prioritized repair plan. |
+| [Test coverage audit](https://github.com/nyldn/claude-octopus/blob/main/.claude/skills/skill-coverage-audit/SKILL.md) | Find important changed code that tests do not exercise and add focused coverage. |
 | [Thought partner](https://github.com/nyldn/claude-octopus/blob/main/.claude/skills/skill-thought-partner/SKILL.md) | Explore an early idea through questions, alternatives, and concrete next steps. |
+| [Verification gate](https://github.com/nyldn/claude-octopus/blob/main/.claude/skills/skill-verification-gate/SKILL.md) | Require fresh evidence before claiming that work is complete, fixed, or ready to ship. |
+| [Visual feedback](https://github.com/nyldn/claude-octopus/blob/main/.claude/skills/skill-visual-feedback/SKILL.md) | Turn screenshots and visual bug reports into scoped fixes and repeatable checks. |
 
 ## Install
 
